@@ -6,4 +6,4 @@ When we describe the methods a repository implements, we frequently need to expr
 
 .. math:: t = \sum_{i=1}^n e^{\frac{1}{\tau_i}}
 
-This page serves as an example of how such is done. 
+This page serves as an example of how such is done.

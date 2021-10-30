@@ -17,7 +17,7 @@ def read_requirements(path):
 
 setup(
     name="kulhadi",
-    python_requires=">=3.8.0",
+    python_requires=">=3.7.0",
     setup_requires=["setuptools_scm"],
     install_requires=read_requirements(requirements_path),
     use_scm_version={
@@ -31,13 +31,8 @@ setup(
     package_data={},
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    entry_points={
-        "console_scripts": [
-            "kulhadi = kulhadi.cli:entrypoint"
-        ]
-    },
+    entry_points={"console_scripts": ["kulhadi = kulhadi.cli:entrypoint"]},
     author="Jay Vala",
     author_email="jay.vala@msn.com",
     url="https://github.com/jdvala/kulhadi",
 )
-
