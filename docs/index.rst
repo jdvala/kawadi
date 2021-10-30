@@ -1,4 +1,4 @@
-Welcome to kulhadi's documentation!
+Welcome to kawadi's documentation!
 ======================================
 
 .. toctree::

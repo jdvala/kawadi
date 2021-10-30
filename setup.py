@@ -16,14 +16,14 @@ def read_requirements(path):
 
 
 setup(
-    name="kulhadi",
+    name="kawadi",
     python_requires=">=3.7.0",
     setup_requires=["setuptools_scm"],
     install_requires=read_requirements(requirements_path),
     use_scm_version={
         "version_scheme": "guess-next-dev",
         "local_scheme": "dirty-tag",
-        "write_to": "src/kulhadi/_repo_version.py",
+        "write_to": "src/kawadi/_repo_version.py",
         "write_to_template": 'version = "{version}"\n',
         "relative_to": __file__,
     },
@@ -31,8 +31,8 @@ setup(
     package_data={},
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    entry_points={"console_scripts": ["kulhadi = kulhadi.cli:entrypoint"]},
+    entry_points={"console_scripts": ["kawadi = kawadi.cli:entrypoint"]},
     author="Jay Vala",
     author_email="jay.vala@msn.com",
-    url="https://github.com/jdvala/kulhadi",
+    url="https://github.com/jdvala/kawadi",
 )
