@@ -1,4 +1,4 @@
-name: Python LEI
+name: kulhadi
 
 on:
   pull_request:
