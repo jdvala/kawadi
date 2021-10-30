@@ -1,55 +1,60 @@
 # kulhadi
 
-[![Build Status](https://github.com/jdvala/kulhadi/workflows/Build%20Master/badge.svg)](https://github.com/jdvala/kulhadi/actions)
-[![Documentation](https://github.com/jdvala/kulhadi/workflows/Documentation/badge.svg)](https://jdvala.github.io/kulhadi)
-[![Code Coverage](https://codecov.io/gh/jdvala/kulhadi/branch/master/graph/badge.svg)](https://codecov.io/gh/jdvala/kulhadi)
+[![Build Status](https://github.com/jdvala/kulhadi/workflows/Build%20main/badge.svg)](https://github.com/jdvala/kulhadi/actions)
+[![Code Coverage](https://codecov.io/gh/jdvala/kulhadi/branch/main/graph/badge.svg)](https://codecov.io/gh/jdvala/kulhadi)
+![Kulhadi](kulhadi.png)
 
-Kulhadi is collection of small tools that I found useful for me more often.
+
+Kulhadi (कुल्हाड़ी in Hindi) (Axe in Englsih) is a versatile tool that used as a form of weapon and is used to cut, shape and split wood.
+
+
+Kulhadi is collection of small tools that I found useful for me more often. Currently it contains text search which searches a string inside another string.
+
+
 
 ---
 
-## Features
-* Store values and retain the prior value in memory
-* ... some other functionality
-
 ## Quick Start
 ```python
-from kulhadi import Example
+from kulhadi.text_search import SearchInText
 
-a = Example()
-a.get_value()  # 10
+search = SearchInText()
+
+text_to_find = "String distance algorithm"
+text_to_search = """SIFT4 is a general purpose string distance algorithm inspired by JaroWinkler and Longest Common Subsequence. It was developed to produce a distance measure that matches as close as possible to the human perception of string distance. Hence it takes into account elements like character substitution, character distance, longest common subsequence etc. It was developed using experimental testing, and without theoretical background."""
+
+result = search.find(text_to_find, text_to_search)
+
+print(result)
+[
+    {
+        "sim_score": 1.0,
+        "searched_text": "string distance algorithm",
+        "to_find": "string distance algorithm",
+        "start": 27,
+        "end": 52,
+    }
+]
 ```
+
+If the text that needs to be searched is big, `SearchInText` can utilize `multiprocessing` to make the search fast.
+
+```py
+from kulhadi.text_search import SearchInText
+
+search = SearchInText(multiprocessing=True, max_workers=8)
+```
+
 
 ## Installation
 **Stable Release:** `pip install kulhadi`<br>
 **Development Head:** `pip install git+https://github.com/jdvala/kulhadi.git`
 
-## Documentation
-For full package documentation please visit [jdvala.github.io/kulhadi](https://jdvala.github.io/kulhadi).
 
 ## Development
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to developing the code.
 
-## The Four Commands You Need To Know
-1. `pip install -e .[dev]`
 
-    This will install your package in editable mode with all the required development
-    dependencies (i.e. `tox`).
-
-2. `make build`
-
-    This will run `tox` which will run all your tests in both Python 3.6, Python 3.7,
-    and Python 3.8 as well as linting your code.
-
-3. `make clean`
-
-    This will clean up various Python and build generated files so that you can ensure
-    that you are working in a clean environment.
-
-4. `make docs`
-
-    This will generate and launch a web browser to view the most up-to-date
-    documentation for your Python package.
 
 #### Additional Optional Setup Steps:
 * Turn your project into a GitHub repository:

@@ -18,7 +18,7 @@ Ready to contribute? Here's how to set up `kulhadi` for local development.
 
     ```bash
     cd kulhadi/
-    pip install -e .[dev]
+    pip install -e .
     ```
 
 4. Create a branch for local development:
@@ -30,11 +30,10 @@ Ready to contribute? Here's how to set up `kulhadi` for local development.
     Ex: feature/read-tiff-files or bugfix/handle-file-not-found<br>
     Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass linting and
-   tests, including testing other Python versions with make:
+5. When you're done making changes, check that your changes pass linting and tests.
 
     ```bash
-    make build
+    make tests
     ```
 
 6. Commit your changes and push your branch to GitHub:
