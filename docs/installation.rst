@@ -8,13 +8,13 @@ Installation
 Stable release
 --------------
 
-To install kulhadi, run this command in your terminal:
+To install kawadi, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install kulhadi
+    $ pip install kawadi
 
-This is the preferred method to install kulhadi, as it will always install the most recent stable release.
+This is the preferred method to install kawadi, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -26,19 +26,19 @@ you through the process.
 From sources
 ------------
 
-The sources for kulhadi can be downloaded from the `Github repo`_.
+The sources for kawadi can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/jdvala/kulhadi
+    $ git clone git://github.com/jdvala/kawadi
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl  -OL https://github.com/jdvala/kulhadi/tarball/master
+    $ curl  -OL https://github.com/jdvala/kawadi/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/jdvala/kulhadi
-.. _tarball: https://github.com/jdvala/kulhadi/tarball/master
+.. _Github repo: https://github.com/jdvala/kawadi
+.. _tarball: https://github.com/jdvala/kawadi/tarball/master

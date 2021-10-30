@@ -1,6 +1,6 @@
 import pytest
 
-from kulhadi.text_search import SearchInText
+from kawadi.text_search import SearchInText
 
 
 @pytest.fixture()
