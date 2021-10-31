@@ -1,3 +1,4 @@
+import os.path as path
 from pathlib import Path
 
 from setuptools import find_packages, setup
@@ -5,6 +6,8 @@ from setuptools import find_packages, setup
 here = Path(__file__).parent
 
 requirements_path = here / "requirements" / "prod.txt"
+
+readme_path = path.join(here, "README.md")
 
 
 def read_requirements(path):
@@ -15,8 +18,15 @@ def read_requirements(path):
         raise RuntimeError(f"{path} is broken")
 
 
+def read_readme(path):
+    with open(path, mode="rt", encoding="utf-8") as fp:
+        return fp.read()
+
+
 setup(
     name="kawadi",
+    long_description=read_readme(readme_path),
+    long_description_content_type="text/markdown",
     python_requires=">=3.7.0",
     setup_requires=["setuptools_scm"],
     install_requires=read_requirements(requirements_path),
@@ -31,6 +41,16 @@ setup(
     package_data={},
     packages=find_packages(where="src"),
     package_dir={"": "src"},
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Topic :: Utilities",
+    ],
     entry_points={"console_scripts": ["kawadi = kawadi.cli:entrypoint"]},
     author="Jay Vala",
     author_email="jay.vala@msn.com",

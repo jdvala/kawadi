@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/jdvala/kawadi/workflows/Build%20main/badge.svg)](https://github.com/jdvala/kawadi/actions)
 [![Code Coverage](https://codecov.io/gh/jdvala/kawadi/branch/main/graph/badge.svg)](https://codecov.io/gh/jdvala/kawadi)
-![kawadi](kawadi.png)
+![kawadi](https://raw.githubusercontent.com/jdvala/kawadi/main/kawadi.png)
 
 
 kawadi (કવાડિ in Gujarati) (Axe in English) is a versatile tool that used as a form of weapon and is used to cut, shape and split wood.
