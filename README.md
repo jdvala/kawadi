@@ -33,6 +33,12 @@ for each slide in slides
 Currently, there are 3 similarity scores are calculated and averaged to calculate the final score. These similarity scores are `Cosine`, `JaroWinkler` and `Normalized Levinstine` similarities.
 
 
+## In development
+- [x] Add functionality to accept custom user similarity metrics.
+- [] Generate documentation.
+- [] Write the custom counter
+
+You can follow the project development in the Projects tab.
 ---
 
 ## Quick Start
@@ -66,6 +72,28 @@ from kawadi.text_search import SearchInText
 search = SearchInText(multiprocessing=True, max_workers=8)
 ```
 
+## Custom user defined score calculation.
+Its often the case that the provided string similarity score is not enough for the use case that you may have. For this very case, you can add, your own score calculation.
+
+```py
+from kawadi.text_search import SearchInText
+
+
+def my_custom_fun(**kwargs):
+
+  slide_of_text:str = kwargs["slide_of_text"]
+  text_to_find:str = kwargs["text_to_find"]
+
+  # Here you can then go on to do preprocessing if you like,
+  # or use them to count char based n-gram string matching scores.
+
+  return score: float
+
+search = SearchInText(search_threshold=0.9, custom_score_func= your custom func)
+```
+This custom score function will have access to two things `slide_of_text` for every slide in text (From the example above, "The big", "big brown" and so on...) and `text_to_find`.
+
+> Note: The return type of this custom function should be same as the type of `search_threshold` as you can see from the above example.
 
 ## Installation
 **Stable Release:** `pip install kawadi`<br>
