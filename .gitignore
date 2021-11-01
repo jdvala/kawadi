@@ -67,7 +67,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-docs/kulhadi.*rst
+docs/kawadi.*rst
 
 # PyBuilder
 target/

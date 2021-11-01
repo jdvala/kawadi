@@ -1,124 +1,116 @@
-# kulhadi
+# kawadi
 
-[![Build Status](https://github.com/jdvala/kulhadi/workflows/Build%20Master/badge.svg)](https://github.com/jdvala/kulhadi/actions)
-[![Documentation](https://github.com/jdvala/kulhadi/workflows/Documentation/badge.svg)](https://jdvala.github.io/kulhadi)
-[![Code Coverage](https://codecov.io/gh/jdvala/kulhadi/branch/master/graph/badge.svg)](https://codecov.io/gh/jdvala/kulhadi)
+[![Build Status](https://github.com/jdvala/kawadi/workflows/Build%20main/badge.svg)](https://github.com/jdvala/kawadi/actions)
+[![Code Coverage](https://codecov.io/gh/jdvala/kawadi/branch/main/graph/badge.svg)](https://codecov.io/gh/jdvala/kawadi)
+![kawadi](https://raw.githubusercontent.com/jdvala/kawadi/main/kawadi.png)
 
-Kulhadi is collection of small tools that I found useful for me more often.
 
+kawadi (કવાડિ in Gujarati) (Axe in English) is a versatile tool that used as a form of weapon and is used to cut, shape and split wood.
+
+
+kawadi is collection of small tools that I found useful for me more often. Currently it contains text search which searches a string inside another string.
+
+## Text Search
+Text search in kawadi uses sliding window technique to search for a word or phrase in another text. The step size in the sliding window is 1 and the window size is the size of the word/phrase we are interested in.
+
+For example, if the text we are interested in searching is "The big brown fox jumped over the lazy dog" and the word that we want to search is "brown fox".
+
+### Algorithm
+```
+text = "The big brown fox jumped over the lazy dog"
+interested_word = "brown fox"
+window_size = len(interested.split()) -> len(["brown", ["fox"]])
+
+slides = sliding_window(text, window_size) -> ['The', 'big']['big', 'brown']
+['brown', 'fox']['fox', 'jumped']['jumped', 'over']['over', 'the']['the', 'lazy']['lazy', 'dog']
+
+for each slide in slides
+  score(" ".join(slide), interested_word)
+  if score >= threshold then
+    select slide
+  else
+    continue
+```
+
+Currently, there are 3 similarity scores are calculated and averaged to calculate the final score. These similarity scores are `Cosine`, `JaroWinkler` and `Normalized Levinstine` similarities.
+
+### Use-cases:
+* In creating labeled dataset for Named Entity Recognition.
+* Quick search and replace text in huge amount of text.
+
+### Why not regex?
+Regular expressions are tricky and its possible to make them dynamic but that very difficult, for the use case I had in mind regular expressions were not a viable option. I tried creating a dataset myself for a data science project I was working on with regular expression but it become really complex very soon, so its not scalable. Also, the time taken to create these regular expressions is much higher for me as I am a novice.
+
+However I would like to point out that this project is only viable for small scale or medium scale dataset creation, for big data I would potentially use something like ElasticSearch.
+
+
+You can follow the project development in the Projects tab.
 ---
-
-## Features
-* Store values and retain the prior value in memory
-* ... some other functionality
 
 ## Quick Start
 ```python
-from kulhadi import Example
+from kawadi.text_search import SearchInText
 
-a = Example()
-a.get_value()  # 10
+search = SearchInText()
+
+text_to_find = "String distance algorithm"
+text_to_search = """SIFT4 is a general purpose string distance algorithm inspired by JaroWinkler and
+Longest Common Subsequence. It was developed to produce a distance measure that matches as close as
+possible to the human perception of string distance. Hence it takes into account elements like character
+substitution, character distance, longest common subsequence etc. It was developed using experimental testing,
+and without theoretical background."""
+
+result = search.find_in_text(text_to_find, text_to_search)
+
+print(result)
+[
+    {
+        "sim_score": 1.0,
+        "searched_text": "string distance algorithm",
+        "to_find": "string distance algorithm",
+        "start": 27,
+        "end": 52,
+    }
+]
 ```
 
-## Installation
-**Stable Release:** `pip install kulhadi`<br>
-**Development Head:** `pip install git+https://github.com/jdvala/kulhadi.git`
+If the text that needs to be searched is big, `SearchInText` can utilize `multiprocessing` to make the search fast.
 
-## Documentation
-For full package documentation please visit [jdvala.github.io/kulhadi](https://jdvala.github.io/kulhadi).
+```py
+from kawadi.text_search import SearchInText
+
+search = SearchInText(multiprocessing=True, max_workers=8)
+```
+
+## Custom user defined score calculation.
+Its often the case that the provided string similarity score is not enough for the use case that you may have. For this very case, you can add, your own score calculation.
+
+```py
+from kawadi.text_search import SearchInText
+
+
+def my_custom_fun(**kwargs):
+
+  slide_of_text:str = kwargs["slide_of_text"]
+  text_to_find:str = kwargs["text_to_find"]
+
+  # Here you can then go on to do preprocessing if you like,
+  # or use char based n-gram string matching scores.
+
+  return score: float
+
+search = SearchInText(search_threshold=0.9, custom_score_func= your custom func)
+```
+This custom score function will have access to two things `slide_of_text` for every slide in text (From the example above, "The big", "big brown" and so on...) and `text_to_find`.
+
+> Note: The return type of this custom function should be same as the type of `search_threshold` as you can see from the above example.
+
+## Installation
+**Stable Release:** `pip install kawadi`<br>
+**Development Head:** `pip install git+https://github.com/jdvala/kawadi.git`
+
 
 ## Development
 See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to developing the code.
-
-## The Four Commands You Need To Know
-1. `pip install -e .[dev]`
-
-    This will install your package in editable mode with all the required development
-    dependencies (i.e. `tox`).
-
-2. `make build`
-
-    This will run `tox` which will run all your tests in both Python 3.6, Python 3.7,
-    and Python 3.8 as well as linting your code.
-
-3. `make clean`
-
-    This will clean up various Python and build generated files so that you can ensure
-    that you are working in a clean environment.
-
-
-#### Additional Optional Setup Steps:
-* Turn your project into a GitHub repository:
-  * Make sure you have `git` installed, if you don't, [follow these instructions](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-  * Make an account on [github.com](https://github.com)
-  * Go to [make a new repository](https://github.com/new)
-  * _Recommendations:_
-    * _It is strongly recommended to make the repository name the same as the Python
-    package name_
-    * _A lot of the following optional steps are *free* if the repository is Public,
-    plus open source is cool_
-  * After a GitHub repo has been created, run the following commands:
-    * `git remote add origin git@github.com:jdvala/kulhadi.git`
-    * `git push -u origin master`
-* Register kulhadi with Codecov:
-  * Make an account on [codecov.io](https://codecov.io)
-  (Recommended to sign in with GitHub)
-  * Select `jdvala` and click: `Add new repository`
-  * Copy the token provided, go to your [GitHub repository's settings and under the `Secrets` tab](https://github.com/jdvala/kulhadi/settings/secrets),
-  add a secret called `CODECOV_TOKEN` with the token you just copied.
-  Don't worry, no one will see this token because it will be encrypted.
-* Generate and add an access token as a secret to the repository for auto documentation
-generation to work
-  * Go to your [GitHub account's Personal Access Tokens page](https://github.com/settings/tokens)
-  * Click: `Generate new token`
-  * _Recommendations:_
-    * _Name the token: "Auto-Documentation Generation" or similar so you know what it
-    is being used for later_
-    * _Select only: `repo:status`, `repo_deployment`, and `public_repo` to limit what
-    this token has access to_
-  * Copy the newly generated token
-  * Go to your [GitHub repository's settings and under the `Secrets` tab](https://github.com/jdvala/kulhadi/settings/secrets),
-  add a secret called `ACCESS_TOKEN` with the personal access token you just created.
-  Don't worry, no one will see this password because it will be encrypted.
-* Register your project with PyPI:
-  * Make an account on [pypi.org](https://pypi.org)
-  * Go to your [GitHub repository's settings and under the `Secrets` tab](https://github.com/jdvala/kulhadi/settings/secrets),
-  add a secret called `PYPI_TOKEN` with your password for your PyPI account.
-  Don't worry, no one will see this password because it will be encrypted.
-  * Next time you push to the branch: `stable`, GitHub actions will build and deploy
-  your Python package to PyPI.
-  * _Recommendation: Prior to pushing to `stable` it is recommended to install and run
-  `bumpversion` as this will,
-  tag a git commit for release and update the `setup.py` version number._
-* Add branch protections to `master` and `stable`
-    * To protect from just anyone pushing to `master` or `stable` (the branches with
-    more tests and deploy
-    configurations)
-    * Go to your [GitHub repository's settings and under the `Branches` tab](https://github.com/jdvala/kulhadi/settings/branches), click `Add rule` and select the
-    settings you believe best.
-    * _Recommendations:_
-      * _Require pull request reviews before merging_
-      * _Require status checks to pass before merging (Recommended: lint and test)_
-
-#### Suggested Git Branch Strategy
-1. `master` is for the most up-to-date development, very rarely should you directly
-commit to this branch. GitHub Actions will run on every push and on a CRON to this
-branch but still recommended to commit to your development branches and make pull
-requests to master.
-2. `stable` is for releases only. When you want to release your project on PyPI, simply
-make a PR from `master` to `stable`, this template will handle the rest as long as you
-have added your PyPI information described in the above **Optional Steps** section.
-3. Your day-to-day work should exist on branches separate from `master`. Even if it is
-just yourself working on the repository, make a PR from your working branch to `master`
-so that you can ensure your commits don't break the development head. GitHub Actions
-will run on every push to any branch or any pull request from any branch to any other
-branch.
-4. It is recommended to use "Squash and Merge" commits when committing PR's. It makes
-each set of changes to `master` atomic and as a side effect naturally encourages small
-well defined PR's.
-5. GitHub's UI is bad for rebasing `master` onto `stable`, as it simply adds the
-commits to the other branch instead of properly rebasing from what I can tell. You
-should always rebase locally on the CLI until they fix it.
-
 
 ***Free software: MIT license***

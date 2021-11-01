@@ -18,14 +18,15 @@ class SearchInText:
 
     def __init__(
         self,
-        search_threshold: float = 0.90,
+        score_threshold: float = 0.90,
         multiprocessing: bool = False,
         max_workers: int = 0,
+        custom_score_func: tt.Callable = None,
     ):
-        self.search_threshold = search_threshold
+        self.score_threshold = score_threshold
         self.multiprocessing = multiprocessing
         self.max_workers = max_workers
-
+        self.custom_score_fun = custom_score_func
         self.jaro_winkler = JaroWinkler()
         self.normalized_levenshtein = NormalizedLevenshtein()
         self.cosine_similarity = Cosine(1)
@@ -38,6 +39,25 @@ class SearchInText:
                     mp.cpu_count(),
                 )
                 self.max_workers = mp.cpu_count()
+
+    def _check_for_custom_score(self, ret_score) -> None:
+        """Check if the return type of the custom score is in agreement with return type of score_threshold.
+
+        Args:
+            ret_score: Value of score from custom score function.
+
+        Raises:
+            ValueError: If the type of custom score function is different from type of score threshold.
+        """
+        type_of_ret_score = type(ret_score)
+        type_of_score_threshold = type(self.score_threshold)
+
+        if type_of_ret_score != type_of_score_threshold:
+            raise ValueError(
+                "The value returned from custom score function is of type {} and value of score_threshold is of type {} which is incompatible",
+                str(type_of_ret_score),
+                str(type_of_score_threshold),
+            )
 
     def _normalize(self, text: str) -> str:
         """Normalize text before searching.
@@ -138,6 +158,20 @@ class SearchInText:
         """
         return len(text_to_find.split())
 
+    def _run_custom_score(self, func: tt.Callable, **kwargs):
+        """Run the custom score function.
+
+        Args:
+            func (tt.Callable): Custom score function.
+            **kwargs: Arbitrary keyword arguments
+
+        Returns:
+            score from user defined custom score function.
+        """
+        custom_score = func(**kwargs)
+        self._check_for_custom_score(custom_score)
+        return custom_score
+
     def _perform_search(
         self, words: tt.List, text_to_find: str, text_to_search: str
     ) -> tt.Optional[tt.Dict]:
@@ -149,18 +183,24 @@ class SearchInText:
             text_to_search: Text to be searched in.
 
         Returns:
-            Dictionary of similarity score, searched_text, to_find, start_index, end_index if the sim_score is greater or equal to the set search_threshold.
+            Dictionary of similarity score, searched_text, to_find, start_index, end_index if the sim_score is greater or equal to the set score_threshold.
         """
-        string_to_search = " ".join(words)
-        score = self._score(string_to_search, text_to_find)
-        if score >= self.search_threshold:
-
+        slide_of_text = " ".join(words)
+        if self.custom_score_fun:
+            score = self._run_custom_score(
+                self.custom_score_fun,
+                slide_of_text=slide_of_text,
+                text_to_find=text_to_find,
+            )
+        else:
+            score = self._score(slide_of_text, text_to_find)
+        if score >= self.score_threshold:
             # calculate the indexes
             indexes = self._find_index(text_to_find, text_to_search)
 
             return {
                 "sim_score": score,
-                "searched_text": string_to_search,
+                "searched_text": slide_of_text,
                 "to_find": text_to_find,
                 "start": indexes.start,
                 "end": indexes.end,
@@ -174,7 +214,7 @@ class SearchInText:
             text_to_search: Text to be searched in.
 
         Returns:
-            All the matched text in another text, with dictionaries of similarity score, searched_text, to_find, start_index, end_index if the sim_score is greater or equal to the set search_threshold.
+            All the matched text in another text, with dictionaries of similarity score, searched_text, to_find, start_index, end_index if the sim_score is greater or equal to the set score_threshold.
         """
         text_to_find = self._normalize(text_to_find)
         text_to_search = self._normalize(text_to_search)
