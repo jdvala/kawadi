@@ -15,6 +15,7 @@ Text search in kawadi uses sliding window technique to search for a word or phra
 
 For example, if the text we are interested in searching is "The big brown fox jumped over the lazy dog" and the word that we want to search is "brown fox".
 
+### Algorithm
 ```
 text = "The big brown fox jumped over the lazy dog"
 interested_word = "brown fox"
@@ -40,7 +41,7 @@ Currently, there are 3 similarity scores are calculated and averaged to calculat
 ### Why not regex?
 Regular expressions are tricky and its possible to make them dynamic but that very difficult, for the use case I had in mind regular expressions were not a viable option. I tried creating a dataset myself for a data science project I was working on with regular expression but it become really complex very soon, so its not scalable. Also, the time taken to create these regular expressions is much higher for me as I am a novice.
 
-However I would like to point out that this project is only viable for small scale or medium scale dataset creation, for big data I would potentially use something like ElasticSearch and it would be easy to create something just like this with ElasticSearch.
+However I would like to point out that this project is only viable for small scale or medium scale dataset creation, for big data I would potentially use something like ElasticSearch.
 
 
 You can follow the project development in the Projects tab.
