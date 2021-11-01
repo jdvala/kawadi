@@ -20,7 +20,8 @@ text = "The big brown fox jumped over the lazy dog"
 interested_word = "brown fox"
 window_size = len(interested.split()) -> len(["brown", ["fox"]])
 
-slides = sliding_window(text, window_size) -> ['The', 'big']['big', 'brown']['brown', 'fox']['fox', 'jumped']['jumped', 'over']['over', 'the']['the', 'lazy']['lazy', 'dog']
+slides = sliding_window(text, window_size) -> ['The', 'big']['big', 'brown']
+['brown', 'fox']['fox', 'jumped']['jumped', 'over']['over', 'the']['the', 'lazy']['lazy', 'dog']
 
 for each slide in slides
   score(" ".join(slide), interested_word)
@@ -32,11 +33,15 @@ for each slide in slides
 
 Currently, there are 3 similarity scores are calculated and averaged to calculate the final score. These similarity scores are `Cosine`, `JaroWinkler` and `Normalized Levinstine` similarities.
 
+### Use-cases:
+* In creating labeled dataset for Named Entity Recognition.
+* Quick search and replace text in huge amount of text.
 
-## In development
-- [x] Add functionality to accept custom user similarity metrics.
-- [] Generate documentation.
-- [] Write the custom counter
+### Why not regex?
+Regular expressions are tricky and its possible to make them dynamic but that very difficult, for the use case I had in mind regular expressions were not a viable option. I tried creating a dataset myself for a data science project I was working on with regular expression but it become really complex very soon, so its not scalable. Also, the time taken to create these regular expressions is much higher for me as I am a novice.
+
+However I would like to point out that this project is only viable for small scale or medium scale dataset creation, for big data I would potentially use something like ElasticSearch and it would be easy to create something just like this with ElasticSearch.
+
 
 You can follow the project development in the Projects tab.
 ---
@@ -48,7 +53,11 @@ from kawadi.text_search import SearchInText
 search = SearchInText()
 
 text_to_find = "String distance algorithm"
-text_to_search = """SIFT4 is a general purpose string distance algorithm inspired by JaroWinkler and Longest Common Subsequence. It was developed to produce a distance measure that matches as close as possible to the human perception of string distance. Hence it takes into account elements like character substitution, character distance, longest common subsequence etc. It was developed using experimental testing, and without theoretical background."""
+text_to_search = """SIFT4 is a general purpose string distance algorithm inspired by JaroWinkler and
+Longest Common Subsequence. It was developed to produce a distance measure that matches as close as
+possible to the human perception of string distance. Hence it takes into account elements like character
+substitution, character distance, longest common subsequence etc. It was developed using experimental testing,
+and without theoretical background."""
 
 result = search.find_in_text(text_to_find, text_to_search)
 
@@ -85,7 +94,7 @@ def my_custom_fun(**kwargs):
   text_to_find:str = kwargs["text_to_find"]
 
   # Here you can then go on to do preprocessing if you like,
-  # or use them to count char based n-gram string matching scores.
+  # or use char based n-gram string matching scores.
 
   return score: float
 
