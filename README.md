@@ -46,10 +46,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for information related to developing the
     This will clean up various Python and build generated files so that you can ensure
     that you are working in a clean environment.
 
-4. `make docs`
-
-    This will generate and launch a web browser to view the most up-to-date
-    documentation for your Python package.
 
 #### Additional Optional Setup Steps:
 * Turn your project into a GitHub repository:
